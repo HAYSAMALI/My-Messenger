@@ -216,7 +216,7 @@ function App() {
         setUser(data.user);
         await encryptionManager.current.generateSharedKey();
         initWebSocket(data.user);
-        loadMessages();
+        // loadMessages will be called by the useEffect when user state changes
       } else {
         setLoginError(data.message);
       }

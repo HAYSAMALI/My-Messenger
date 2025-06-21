@@ -89,6 +89,12 @@ async def login(request: LoginRequest):
             message="Invalid password"
         )
 
+# Clear messages endpoint (for testing)
+@api_router.delete("/messages/clear")
+async def clear_messages():
+    result = await db.messages.delete_many({})
+    return {"message": f"Cleared {result.deleted_count} messages"}
+
 # Get messages endpoint
 @api_router.get("/messages/{user}", response_model=List[Message])
 async def get_messages(user: str):

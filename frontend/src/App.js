@@ -69,7 +69,7 @@ class EncryptionManager {
   // Encrypt message
   async encrypt(message) {
     if (!this.key) {
-      await this.generateKey();
+      await this.generateSharedKey();
     }
 
     const encoder = new TextEncoder();
@@ -95,7 +95,9 @@ class EncryptionManager {
 
   // Decrypt message
   async decrypt(encryptedMessage) {
-    if (!this.key) return null;
+    if (!this.key) {
+      await this.generateSharedKey();
+    }
 
     try {
       const combined = new Uint8Array(

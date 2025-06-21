@@ -129,6 +129,7 @@ function App() {
   const encryptionManager = useRef(new EncryptionManager());
   const ws = useRef(null);
   const messagesEndRef = useRef(null);
+  const messageRefreshInterval = useRef(null);
 
   // Scroll to bottom of messages
   const scrollToBottom = () => {
@@ -138,6 +139,32 @@ function App() {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Set up periodic message refresh when user is logged in
+  useEffect(() => {
+    if (user) {
+      // Load messages initially
+      loadMessages();
+      
+      // Set up periodic refresh every 2 seconds
+      messageRefreshInterval.current = setInterval(() => {
+        loadMessages();
+      }, 2000);
+    } else {
+      // Clear interval when user logs out
+      if (messageRefreshInterval.current) {
+        clearInterval(messageRefreshInterval.current);
+        messageRefreshInterval.current = null;
+      }
+    }
+
+    // Cleanup on unmount
+    return () => {
+      if (messageRefreshInterval.current) {
+        clearInterval(messageRefreshInterval.current);
+      }
+    };
+  }, [user]);
 
   // Initialize WebSocket connection
   const initWebSocket = (username) => {

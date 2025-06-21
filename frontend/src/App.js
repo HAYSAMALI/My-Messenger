@@ -302,6 +302,11 @@ function App() {
     if (ws.current) {
       ws.current.close();
     }
+    // Clear message refresh interval
+    if (messageRefreshInterval.current) {
+      clearInterval(messageRefreshInterval.current);
+      messageRefreshInterval.current = null;
+    }
   };
 
   // Login screen

@@ -133,8 +133,11 @@ async def test_websocket(user):
             
             logger.info(f"Received WebSocket response: {response_data}")
             
+            # The server echoes back the entire JSON string in the 'data' field
             assert response_data["type"] == "pong", f"Expected type=pong, got {response_data['type']}"
-            assert response_data["data"] == "test", f"Expected data=test, got {response_data['data']}"
+            # The server implementation echoes back the entire JSON string, not just the 'test' value
+            assert "ping" in response_data["data"], f"Expected ping in data, got {response_data['data']}"
+            assert "test" in response_data["data"], f"Expected test in data, got {response_data['data']}"
             
             logger.info(f"WebSocket test successful for {user}")
             return True

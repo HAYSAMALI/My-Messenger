@@ -152,7 +152,9 @@ function App() {
     ws.current.onmessage = (event) => {
       const data = JSON.parse(event.data);
       if (data.type === 'new_message') {
-        loadMessages();
+        // Reload messages when we receive a new message notification
+        console.log('Received new message notification, reloading messages');
+        setTimeout(() => loadMessages(), 100); // Small delay to ensure message is saved
       }
     };
 

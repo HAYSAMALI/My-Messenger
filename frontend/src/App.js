@@ -293,6 +293,28 @@ function App() {
     }
   };
 
+  // Clear message history
+  const handleClearHistory = async () => {
+    if (window.confirm('Are you sure you want to clear all message history? This cannot be undone.')) {
+      try {
+        const response = await fetch(`${API}/messages/clear`, {
+          method: 'DELETE',
+        });
+        
+        if (response.ok) {
+          const result = await response.json();
+          console.log(result.message);
+          // Clear local messages and reload
+          setMessages([]);
+          await loadMessages();
+        }
+      } catch (error) {
+        console.error('Error clearing message history:', error);
+        alert('Failed to clear message history. Please try again.');
+      }
+    }
+  };
+
   // Logout
   const handleLogout = () => {
     setUser(null);

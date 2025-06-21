@@ -401,12 +401,20 @@ function App() {
           </div>
         </div>
         
-        <button
-          onClick={handleLogout}
-          className="px-4 py-2 text-sm bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-200"
-        >
-          Logout
-        </button>
+        <div className="flex items-center space-x-3">
+          <button
+            onClick={handleClearHistory}
+            className="px-3 py-1 text-sm bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition duration-200"
+          >
+            Clear History
+          </button>
+          <button
+            onClick={handleLogout}
+            className="px-4 py-2 text-sm bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-200"
+          >
+            Logout
+          </button>
+        </div>
       </div>
 
       {/* Messages area */}

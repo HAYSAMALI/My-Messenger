@@ -10,16 +10,37 @@ class EncryptionManager {
     this.key = null;
   }
 
-  // Generate a new AES-256-GCM key
-  async generateKey() {
-    this.key = await window.crypto.subtle.generateKey(
+  // Generate a shared key for Alpha-Bravo conversation
+  // Using a deterministic approach so both users get the same key
+  async generateSharedKey() {
+    // Create a shared secret that both Alpha and Bravo will use
+    const sharedSecret = "AlphaBravoSharedConversationKey2024!";
+    const encoder = new TextEncoder();
+    const keyMaterial = await window.crypto.subtle.importKey(
+      'raw',
+      encoder.encode(sharedSecret),
+      'PBKDF2',
+      false,
+      ['deriveBits', 'deriveKey']
+    );
+
+    // Derive the actual encryption key from the shared secret
+    this.key = await window.crypto.subtle.deriveKey(
+      {
+        name: 'PBKDF2',
+        salt: encoder.encode('AlphaBravoSalt'),
+        iterations: 100000,
+        hash: 'SHA-256'
+      },
+      keyMaterial,
       {
         name: 'AES-GCM',
-        length: 256,
+        length: 256
       },
       true,
       ['encrypt', 'decrypt']
     );
+    
     return this.key;
   }
 

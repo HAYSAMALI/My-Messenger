@@ -298,6 +298,13 @@ function App() {
     }
   };
 
+  // Toggle theme
+  const toggleTheme = () => {
+    const newTheme = !isDarkTheme;
+    setIsDarkTheme(newTheme);
+    localStorage.setItem('theme', newTheme ? 'dark' : 'light');
+  };
+
   // Clear message history
   const handleClearHistory = async () => {
     if (window.confirm('Are you sure you want to clear all message history? This cannot be undone.')) {

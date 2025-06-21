@@ -194,7 +194,7 @@ function App() {
 
       if (data.success) {
         setUser(data.user);
-        await encryptionManager.current.generateKey();
+        await encryptionManager.current.generateSharedKey();
         initWebSocket(data.user);
         loadMessages();
       } else {

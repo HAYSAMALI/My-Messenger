@@ -412,18 +412,18 @@ function App() {
 
   // Chat interface
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col">
+    <div className={`min-h-screen ${isDarkTheme ? 'bg-gray-900' : 'bg-gray-100'} flex flex-col`}>
       {/* Header */}
-      <div className="bg-white shadow-sm border-b px-6 py-4 flex justify-between items-center">
+      <div className={`${isDarkTheme ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} shadow-sm border-b px-6 py-4 flex justify-between items-center`}>
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
             <span className="text-white font-bold text-lg">{user[0]}</span>
           </div>
           <div>
-            <h1 className="text-xl font-semibold text-gray-800">
+            <h1 className={`text-xl font-semibold ${isDarkTheme ? 'text-white' : 'text-gray-800'}`}>
               {user} - Encrypted Chat
             </h1>
-            <p className="text-sm text-gray-600">
+            <p className={`text-sm ${isDarkTheme ? 'text-gray-300' : 'text-gray-600'}`}>
               Chatting with {user === 'Alpha' ? 'Bravo' : 'Alpha'} 
               <span className={`ml-2 inline-block w-2 h-2 rounded-full ${wsConnected ? 'bg-green-400' : 'bg-red-400'}`}></span>
             </p>
@@ -431,6 +431,21 @@ function App() {
         </div>
         
         <div className="flex items-center space-x-3">
+          <button
+            onClick={toggleTheme}
+            className={`p-2 rounded-lg ${isDarkTheme ? 'bg-gray-700 text-yellow-400 hover:bg-gray-600' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'} transition duration-200`}
+            title={`Switch to ${isDarkTheme ? 'light' : 'dark'} theme`}
+          >
+            {isDarkTheme ? (
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clipRule="evenodd" />
+              </svg>
+            ) : (
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+              </svg>
+            )}
+          </button>
           <button
             onClick={handleClearHistory}
             className="px-3 py-1 text-sm bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition duration-200"
@@ -454,11 +469,11 @@ function App() {
             className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
               message.sender === user
                 ? 'bg-blue-500 text-white ml-auto'
-                : 'bg-white text-gray-800 border'
+                : `${isDarkTheme ? 'bg-gray-700 text-white border-gray-600' : 'bg-white text-gray-800 border-gray-200'} border`
             }`}
           >
             <p className="text-sm">{message.decrypted_content}</p>
-            <p className={`text-xs mt-1 ${message.sender === user ? 'text-blue-100' : 'text-gray-500'}`}>
+            <p className={`text-xs mt-1 ${message.sender === user ? 'text-blue-100' : (isDarkTheme ? 'text-gray-400' : 'text-gray-500')}`}>
               {new Date(message.timestamp).toLocaleTimeString()}
             </p>
           </div>
@@ -467,14 +482,14 @@ function App() {
       </div>
 
       {/* Message input */}
-      <div className="bg-white border-t px-6 py-4">
+      <div className={`${isDarkTheme ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border-t px-6 py-4`}>
         <form onSubmit={handleSendMessage} className="flex space-x-3">
           <input
             type="text"
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
             placeholder="Type your encrypted message..."
-            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className={`flex-1 px-4 py-2 border ${isDarkTheme ? 'border-gray-600 bg-gray-700 text-white placeholder-gray-400' : 'border-gray-300 bg-white text-gray-900 placeholder-gray-500'} rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
             required
           />
           <button

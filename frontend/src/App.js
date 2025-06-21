@@ -10,32 +10,23 @@ class EncryptionManager {
     this.key = null;
   }
 
-  // Generate a shared key for Alpha-Bravo conversation
-  // Using a deterministic approach so both users get the same key
+  // Generate a shared key for Alpha-Bravo conversation using a simple approach
   async generateSharedKey() {
-    // Create a shared secret that both Alpha and Bravo will use
-    const sharedSecret = "AlphaBravoSharedConversationKey2024!";
-    const encoder = new TextEncoder();
-    const keyMaterial = await window.crypto.subtle.importKey(
-      'raw',
-      encoder.encode(sharedSecret),
-      'PBKDF2',
-      false,
-      ['deriveBits', 'deriveKey']
-    );
+    // Use a simple shared secret that both Alpha and Bravo will use
+    // In production, this would be done through secure key exchange
+    const sharedKeyData = new Uint8Array([
+      0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF,
+      0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54, 0x32, 0x10,
+      0x0F, 0x1E, 0x2D, 0x3C, 0x4B, 0x5A, 0x69, 0x78,
+      0x87, 0x96, 0xA5, 0xB4, 0xC3, 0xD2, 0xE1, 0xF0
+    ]);
 
-    // Derive the actual encryption key from the shared secret
-    this.key = await window.crypto.subtle.deriveKey(
-      {
-        name: 'PBKDF2',
-        salt: encoder.encode('AlphaBravoSalt'),
-        iterations: 100000,
-        hash: 'SHA-256'
-      },
-      keyMaterial,
+    this.key = await window.crypto.subtle.importKey(
+      'raw',
+      sharedKeyData,
       {
         name: 'AES-GCM',
-        length: 256
+        length: 256,
       },
       true,
       ['encrypt', 'decrypt']

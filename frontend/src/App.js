@@ -125,6 +125,11 @@ function App() {
   const [newMessage, setNewMessage] = useState('');
   const [wsConnected, setWsConnected] = useState(false);
   const [loginError, setLoginError] = useState('');
+  const [isDarkTheme, setIsDarkTheme] = useState(() => {
+    // Load theme preference from localStorage or default to light
+    const savedTheme = localStorage.getItem('theme');
+    return savedTheme === 'dark';
+  });
   
   const encryptionManager = useRef(new EncryptionManager());
   const ws = useRef(null);

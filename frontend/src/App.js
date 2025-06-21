@@ -204,17 +204,30 @@ function App() {
     if (!user) return;
 
     try {
+      console.log(`Loading messages for ${user}`);
       const response = await fetch(`${API}/messages/${user}`);
       const data = await response.json();
 
       // Decrypt messages
       const decryptedMessages = await Promise.all(
-        data.map(async (msg) => ({
-          ...msg,
-          decrypted_content: await encryptionManager.current.decrypt(msg.encrypted_content)
-        }))
+        data.map(async (msg) => {
+          try {
+            const decrypted_content = await encryptionManager.current.decrypt(msg.encrypted_content);
+            return {
+              ...msg,
+              decrypted_content
+            };
+          } catch (error) {
+            console.error('Failed to decrypt message:', error);
+            return {
+              ...msg,
+              decrypted_content: '[Decryption Error]'
+            };
+          }
+        })
       );
 
+      console.log(`Loaded ${decryptedMessages.length} messages for ${user}`);
       setMessages(decryptedMessages);
     } catch (error) {
       console.error('Error loading messages:', error);

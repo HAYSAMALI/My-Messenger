@@ -245,7 +245,8 @@ function App() {
 
       if (response.ok) {
         setNewMessage('');
-        loadMessages();
+        // Reload messages immediately for the sender
+        await loadMessages();
       }
     } catch (error) {
       console.error('Error sending message:', error);
